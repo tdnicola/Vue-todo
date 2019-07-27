@@ -1,17 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+      <input v-model='currentTodo' @keydown.enter='addTodo()' placeholder='Add a todo'>
+      <ul class='todo'>
+        <li v-for='todo in todos' :key='todo.id'>
+          {{todo.label}}
+        </li>
+      </ul>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      todos: [],
+      currentTodo: 'ß'
+    }
+  },
+  methods: {
+    addTodo() {
+      this.todos.push({id:this.todos.length, label: this.currentTodo, completed: false});
+      this.currentTodo = '';
+    }
   }
 }
 </script>
