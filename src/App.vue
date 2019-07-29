@@ -1,11 +1,23 @@
 <template>
   <div>
-      <input v-model='currentTodo' @keydown.enter='addTodo()' placeholder='Add a todo'>
+      <input v-model='currentTodo' @keydown.enter='addTodo(todo)' placeholder='Add a todo'>
+     
       <ul class='todo'>
-        <li v-for='todo in todos' :key='todo.id'>
-          <input type='checkbox'>
-            {{todo.label}}
-            <button @click="removeTodo(todo)">Delete</button>
+        <li v-for='(todo, index) in todos' :key='todo.id'>
+          <input type='checkbox' v-model='todo.completed' >
+            <div> 
+              <span 
+                class="todo-item-label"
+                :class='{completed: todo.completed}' 
+                @dblclick='editTodo(todo)' 
+                v-if="!todo.edit">
+                  {{todo.label}}
+              </span> 
+            
+                <input v-else class="todo-item-edit" type="text" v-model='todo.label'> 
+              </div>
+           
+          <button @click="removeTodo(index)">Delete</button>
         </li>
       </ul>
   </div>
@@ -17,22 +29,41 @@
 export default {
   data() {
     return {
-      todos: [],
-      currentTodo: ''
+      todos: [
+        {
+          'id': 1,
+          'label': 'trash',
+          'completed': false,
+          'edit': false
+        },
+          {
+          'id': 2,
+          'label': 'dishes',
+          'completed': false,
+          'edit': false
+        },
+      ],
+      currentTodo: '',
+      editedTodo: null
     }
   },
   methods: {
-    addTodo() {
-      this.todos.push({id:this.todos.length, label: this.currentTodo, completed: false});
-      this.currentTodo = '';
-    },
-    removeTodo(todo) {
-      var index = this.todos.indexOf(todo)
-      this.todos.splice(index,1)
-    },
-    // completeTodo(todo) {
-    //   this.todos
-    // }
+      addTodo() {
+        this.todos.push({
+          id:this.todos.length, 
+          label: this.currentTodo, 
+          completed: false, 
+          edit: false
+          });
+        this.currentTodo = '';
+      },
+      removeTodo(index) {
+        // var index = this.todos.indexOf(todo)
+        this.todos.splice(index,1)
+      },
+    editTodo(todo) {
+     todo.edit = true
+    }
   }
 }
 </script>
@@ -46,4 +77,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.completed {
+  text-decoration: line-through;
+}
+
+
 </style>
