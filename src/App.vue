@@ -3,7 +3,9 @@
       <input v-model='currentTodo' @keydown.enter='addTodo()' placeholder='Add a todo'>
       <ul class='todo'>
         <li v-for='todo in todos' :key='todo.id'>
-          {{todo.label}}
+          <input type='checkbox'>
+            {{todo.label}}
+            <button @click="removeTodo(todo)">Delete</button>
         </li>
       </ul>
   </div>
@@ -16,14 +18,21 @@ export default {
   data() {
     return {
       todos: [],
-      currentTodo: 'ß'
+      currentTodo: ''
     }
   },
   methods: {
     addTodo() {
       this.todos.push({id:this.todos.length, label: this.currentTodo, completed: false});
       this.currentTodo = '';
-    }
+    },
+    removeTodo(todo) {
+      var index = this.todos.indexOf(todo)
+      this.todos.splice(index,1)
+    },
+    // completeTodo(todo) {
+    //   this.todos
+    // }
   }
 }
 </script>
