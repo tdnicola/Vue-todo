@@ -1,26 +1,31 @@
 <template>
-  <div>
-      <input v-model='currentTodo' @keydown.enter='addTodo(todo)' placeholder='Add a todo'>
-     
-      <ul class='todo'>
-        <li v-for='(todo, index) in todos' :key='todo.id'>
-          <input type='checkbox' v-model='todo.completed' >
-            <div> 
-              <span 
-                class="todo-item-label"
-                :class='{completed: todo.completed}' 
-                @dblclick='editTodo(todo)' 
-                v-if="!todo.edit">
-                  {{todo.label}}
-              </span> 
-            
-                <input v-else class="todo-item-edit" type="text" v-model='todo.label'> 
-              </div>
-           
-          <button @click="removeTodo(index)">Delete</button>
-        </li>
-      </ul>
+  <div class='container'>
+    <h1>Get Schtuff Done List</h1>
+    <md-card class="cardBox">
+        <md-field>
+          <md-input v-model='currentTodo' @keydown.enter='addTodo(todo)' placeholder='Add a todo'></md-input>
+        </md-field>
+          <section>
+            <div class='todoBox'>
+              <li v-for='(todo, index) in todos' :key='todo.id'>
+                <input type='checkbox' v-model='todo.completed' >
+                  
+                    <span class="todo-item-label" :class='{completed: todo.completed}' @dblclick='editTodo(todo)' v-if="!todo.edit">
+                        {{todo.label}}
+                    </span> 
+                  
+                      <md-input v-else class="todo-item-edit" type="text" v-model='todo.label' @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.escape="doneEdit(todo)"> 
+                  
+                      </md-input>
+                <button @click="removeTodo(index)">Delete</button>
+              </li>
+            </div>
+          </section>
+        </md-card>
+<!-- WORKOUT INFO -->
+    
   </div>
+
 </template>
 
 <script>
@@ -32,16 +37,11 @@ export default {
       todos: [
         {
           'id': 1,
-          'label': 'trash',
-          'completed': false,
+          'label': 'Get life together',
+          'completed': true,
           'edit': false
         },
-          {
-          'id': 2,
-          'label': 'dishes',
-          'completed': false,
-          'edit': false
-        },
+
       ],
       currentTodo: '',
       editedTodo: null
@@ -49,6 +49,10 @@ export default {
   },
   methods: {
       addTodo() {
+
+        if (this.currentTodo.trim() == 0) {
+          return
+        }
         this.todos.push({
           id:this.todos.length, 
           label: this.currentTodo, 
@@ -61,26 +65,38 @@ export default {
         // var index = this.todos.indexOf(todo)
         this.todos.splice(index,1)
       },
-    editTodo(todo) {
-     todo.edit = true
-    }
+      editTodo(todo) {
+        todo.edit = true
+      },
+      doneEdit(todo) {
+        todo.edit = false
+      }
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+}
+
+li {
+  list-style: none;
+}
+.container {
+  width: 50%;
+  margin: auto;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 
 .completed {
   text-decoration: line-through;
 }
-
+.todoBox {
+  font-size: 1.5em;
+}
+.cardBox {
+padding: 10px;
+}
 
 </style>
